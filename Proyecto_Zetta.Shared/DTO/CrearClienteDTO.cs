@@ -1,15 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Proyecto_Zetta.DB.Data.Entity
+namespace Proyecto_Zetta.Shared.DTO
 {
-    [Index(nameof(Codigo), Name = "Cliente_Cod", IsUnique = true)]
-    public class Cliente : EntityBase
+    public class CrearClienteDTO
     {
         [Required(ErrorMessage = "El código del Cliente es obligatorio.")]
         [Range(0, 9999999999, ErrorMessage = "Máximo número de carácteres {1}.")]
@@ -34,10 +32,5 @@ namespace Proyecto_Zetta.DB.Data.Entity
         [Required(ErrorMessage = "El telefono es obligatorio.")]
         public long Telefono { get; set; }
 
-        [MaxLength(30, ErrorMessage = "Maximo numero de caracteres {1}.")]
-        public string? Mail { get; set; }
-
-        [MaxLength(100, ErrorMessage = "Maximo numero de caracteres {1}.")]
-        public string? Descripcion { get; set; }
     }
 }

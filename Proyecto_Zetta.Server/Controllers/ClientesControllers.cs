@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Zetta.DB.Data;
 using Proyecto_Zetta.DB.Data.Entity;
+using Proyecto_Zetta.Shared.DTO;
 
 namespace Proyecto_Zetta.Server.Controllers
 {
@@ -16,17 +17,29 @@ namespace Proyecto_Zetta.Server.Controllers
             this.context = context;
         }
 
+
+        #region Get
         [HttpGet]
         public async Task<ActionResult<List<Cliente>>> Get()
         {
             return await context.Clientes.ToListAsync();
         }
+        #endregion
 
+        #region Post
         [HttpPost]
-        public async Task<ActionResult<int>> Post(Cliente entidad)
+        public async Task<ActionResult<int>> Post(CrearClienteDTO entidadDTO)
         {
             try
             {
+                Cliente entidad = new Cliente();
+                entidad.Codigo = entidadDTO.Codigo;
+                entidad.Nombre = entidadDTO.Nombre;
+                entidad.Apellido = entidadDTO.Apellido;
+                entidad.Direccion = entidadDTO.Direccion;
+                entidad.Localidad = entidadDTO.Localidad;
+                entidad.Telefono = entidadDTO.Telefono;
+
                 context.Clientes.Add(entidad);
                 await context.SaveChangesAsync();
                 return entidad.Id;
@@ -37,7 +50,9 @@ namespace Proyecto_Zetta.Server.Controllers
                 return BadRequest(e.InnerException?.Message);
             }
         }
+        #endregion
 
+        #region Put
         [HttpPut("{id:int}")] //api/Clientes/2
         public async Task<ActionResult> Put(int id, Cliente entidad)
         {
@@ -72,7 +87,9 @@ namespace Proyecto_Zetta.Server.Controllers
                 return BadRequest(e.InnerException?.Message);
             }
         }
+        #endregion
 
+        #region Delete
         [HttpDelete("{id:int}")] //api/Clientes/2
         public async Task<ActionResult> Delete(int id) 
         {
@@ -88,5 +105,6 @@ namespace Proyecto_Zetta.Server.Controllers
             await context.SaveChangesAsync();
             return Ok();
         }
+        #endregion
     }
 }

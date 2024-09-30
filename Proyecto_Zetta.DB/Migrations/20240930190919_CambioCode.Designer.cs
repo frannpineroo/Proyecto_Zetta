@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Proyecto_Zetta.DB.Data;
 
@@ -11,9 +12,11 @@ using Proyecto_Zetta.DB.Data;
 namespace Proyecto_Zetta.DB.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240930190919_CambioCode")]
+    partial class CambioCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +39,7 @@ namespace Proyecto_Zetta.DB.Migrations
                         .HasColumnType("nvarchar(40)");
 
                     b.Property<int>("Codigo")
+                        .HasMaxLength(4)
                         .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
