@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Zetta.DB.Data;
 using Proyecto_Zetta.DB.Data.Entity;
@@ -11,10 +12,13 @@ namespace Proyecto_Zetta.Server.Controllers
     public class ClientesControllers : ControllerBase
     {
         private readonly Context context;
+        private readonly IMapper mapper;
 
-        public ClientesControllers(Context context)
+        public ClientesControllers(Context context,
+                                   IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
 
@@ -32,14 +36,15 @@ namespace Proyecto_Zetta.Server.Controllers
         {
             try
             {
-                Cliente entidad = new Cliente();
-                entidad.Codigo = entidadDTO.Codigo;
-                entidad.Nombre = entidadDTO.Nombre;
-                entidad.Apellido = entidadDTO.Apellido;
-                entidad.Direccion = entidadDTO.Direccion;
-                entidad.Localidad = entidadDTO.Localidad;
-                entidad.Telefono = entidadDTO.Telefono;
+                //Cliente entidad = new Cliente();
+                //entidad.Codigo = entidadDTO.Codigo;
+                //entidad.Nombre = entidadDTO.Nombre;
+                //entidad.Apellido = entidadDTO.Apellido;
+                //entidad.Direccion = entidadDTO.Direccion;
+                //entidad.Localidad = entidadDTO.Localidad;
+                //entidad.Telefono = entidadDTO.Telefono;
 
+                Cliente entidad = mapper.Map <Cliente>(entidadDTO);
                 context.Clientes.Add(entidad);
                 await context.SaveChangesAsync();
                 return entidad.Id;
