@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Proyecto_Zetta.DB.Data;
 using Proyecto_Zetta.DB.Data.Entity;
+using Proyecto_Zetta.Server.Repositorio;
 using Proyecto_Zetta.Shared.DTO;
 
 namespace Proyecto_Zetta.Server.Controllers
@@ -11,13 +13,13 @@ namespace Proyecto_Zetta.Server.Controllers
     [Route("api/Clientes")]
     public class ClientesControllers : ControllerBase
     {
-        private readonly Context context;
+        private readonly IClienteRepositorio repositorio;
         private readonly IMapper mapper;
 
-        public ClientesControllers(Context context,
+        public ClientesControllers(IClienteRepositorio repositorio,
                                    IMapper mapper)
         {
-            this.context = context;
+            this.repositorio = repositorio;
             this.mapper = mapper;
         }
 
@@ -26,7 +28,29 @@ namespace Proyecto_Zetta.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Cliente>>> Get()
         {
-            return await context.Clientes.ToListAsync();
+            return await repositorio.Select();
+        }
+        #endregion
+
+        #region GetById
+        [HttpGet]
+        public async Task<ActionResult<Cliente>> Get(int id) 
+        {
+            Cliente? holanda = await repositorio.SelectById(id);
+            if (holanda == null)
+            {
+                return NotFound();
+            }
+            return holanda;
+        }
+        #endregion
+
+        #region Existe
+        [HttpGet("existe/{id : int}")] //api/Clientes/existe/2
+        public async Task<ActionResult<bool>> Existe(int id)
+        {
+            var existe = await repositorio.Existe(id);
+            return existe;
         }
         #endregion
 
@@ -45,9 +69,7 @@ namespace Proyecto_Zetta.Server.Controllers
                 //entidad.Telefono = entidadDTO.Telefono;
 
                 Cliente entidad = mapper.Map <Cliente>(entidadDTO);
-                context.Clientes.Add(entidad);
-                await context.SaveChangesAsync();
-                return entidad.Id;
+                return await repositorio.Insert(entidad);
             }
             catch (Exception e)
             {
@@ -65,7 +87,7 @@ namespace Proyecto_Zetta.Server.Controllers
             {
                 return BadRequest("Datos Incorrectos");
             }
-            var pepe = await context.Clientes.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var pepe = await repositorio.SelectById(id);
 
             if (pepe == null)
             {
@@ -82,8 +104,7 @@ namespace Proyecto_Zetta.Server.Controllers
 
             try
             {
-                context.Clientes.Update(pepe);
-                await context.SaveChangesAsync();
+                await repositorio.Update(id, pepe);
                 return Ok();
             }
             catch (Exception e)
@@ -98,16 +119,14 @@ namespace Proyecto_Zetta.Server.Controllers
         [HttpDelete("{id:int}")] //api/Clientes/2
         public async Task<ActionResult> Delete(int id) 
         {
-            var existe = await context.Clientes.AnyAsync(x => x.Id == id);
+            var existe = await repositorio.Existe(id);
             if (!existe) 
             {
                 return NotFound($"El Cliente {id} no existe.");
             }
             Cliente EntidadABorrar = new Cliente();
             EntidadABorrar.Id = id;
-
-            context.Remove(EntidadABorrar);
-            await context.SaveChangesAsync();
+            await repositorio.Delete(id);
             return Ok();
         }
         #endregion
