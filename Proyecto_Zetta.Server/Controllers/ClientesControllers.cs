@@ -46,7 +46,7 @@ namespace Proyecto_Zetta.Server.Controllers
         #endregion
 
         #region Existe
-        [HttpGet("existe/{id : int}")] //api/Clientes/existe/2
+        [HttpGet("existe/{id:int}")] //api/Clientes/existe/2
         public async Task<ActionResult<bool>> Existe(int id)
         {
             var existe = await repositorio.Existe(id);
