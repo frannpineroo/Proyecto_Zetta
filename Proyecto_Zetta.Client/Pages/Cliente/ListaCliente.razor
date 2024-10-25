@@ -1,14 +1,34 @@
 ﻿@page "/api/Clientes"
 @inject IHttpServicio http
 
+
 <h2>Clientes</h2>
 <table>
 	<tr>
-		<th>
-
-		</th>
+		<th>Código</th>
+		<th>Nombre</th>
+		<th>Apellido</th>
+		<th>Dirección</th>
+		<th>Localidad</th>
+		<th>Teléfono</th>
+		<th>Mail</th>
+		<th>Descripción</th>
 	</tr>
+	@foreach (var item in listaCliente)
+	{
+		<tr>
+			<td>@item.Codigo</td>
+			<td>@item.Nombre</td>
+			<td>@item.Apellido</td>
+			<td>@item.Direccion</td>
+			<td>@item.Localidad</td>
+			<td>@item.Telefono</td>
+			<td>@item.Mail</td>
+			<td>@item.Descripcion</td>
+		</tr>
+	}
+
 </table>
 @code {
-
+	List<Cliente> listaCliente
 }
