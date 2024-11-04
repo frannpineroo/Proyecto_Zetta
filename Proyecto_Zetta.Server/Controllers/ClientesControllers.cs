@@ -33,7 +33,7 @@ namespace Proyecto_Zetta.Server.Controllers
         #endregion
 
         #region GetById
-        [HttpGet]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<Cliente>> Get(int id) 
         {
             Cliente? holanda = await repositorio.SelectById(id);

@@ -13,7 +13,7 @@ namespace Proyecto_Zetta.DB.Data.Entity
     {
         [Required(ErrorMessage = "El código del Cliente es obligatorio.")]
         [Range(0, 9999999999, ErrorMessage = "Máximo número de carácteres {1}.")]
-        public int Codigo { get; set; }
+        public string Codigo { get; set; }
 
         [Required(ErrorMessage = "El nombre es obligatorio.")]
         [MaxLength(40, ErrorMessage = "Maximo numero de caracteres {1}.")]
@@ -32,7 +32,7 @@ namespace Proyecto_Zetta.DB.Data.Entity
         public string Localidad { get; set; }
 
         [Required(ErrorMessage = "El telefono es obligatorio.")]
-        public long Telefono { get; set; }
+        public string Telefono { get; set; }
 
         [MaxLength(30, ErrorMessage = "Maximo numero de caracteres {1}.")]
         public string? Mail { get; set; }
