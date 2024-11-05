@@ -2,12 +2,12 @@
 {
     public class HttpRespuesta<T>
     {
-        public T Respuesta { get; }
+        public T? Respuesta { get; }
         public bool Error { get; }
         public HttpResponseMessage HttpResponseMessage { get; set; }
 
 
-        public HttpRespuesta(T respuesta, bool error, HttpResponseMessage httpResponseMessage)
+        public HttpRespuesta(T? respuesta, bool error, HttpResponseMessage httpResponseMessage)
         {
             Respuesta = respuesta;
             Error = error;

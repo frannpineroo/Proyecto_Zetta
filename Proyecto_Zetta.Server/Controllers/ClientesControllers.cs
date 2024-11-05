@@ -1,26 +1,20 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-using Proyecto_Zetta.DB.Data;
 using Proyecto_Zetta.DB.Data.Entity;
 using Proyecto_Zetta.Server.Repositorio;
 using Proyecto_Zetta.Shared.DTO;
 
 namespace Proyecto_Zetta.Server.Controllers
 {
-    [ApiController]
+	[ApiController]
     [Route("api/Clientes")]
     public class ClientesControllers : ControllerBase
     {
         private readonly IClienteRepositorio repositorio;
-        private readonly IMapper mapper;
 
-        public ClientesControllers(IClienteRepositorio repositorio,
-                                   IMapper mapper)
+        public ClientesControllers(IClienteRepositorio repositorio)
         {
             this.repositorio = repositorio;
-            this.mapper = mapper;
         }
 
 
@@ -49,68 +43,47 @@ namespace Proyecto_Zetta.Server.Controllers
         [HttpGet("existe/{id:int}")] //api/Clientes/existe/2
         public async Task<ActionResult<bool>> Existe(int id)
         {
-            var existe = await repositorio.Existe(id);
-            return existe;
+            return await repositorio.Existe(id);
         }
         #endregion
 
         #region Post
         [HttpPost]
-        public async Task<ActionResult<int>> Post(CrearClienteDTO entidadDTO)
+        public async Task<ActionResult<int>> Post(Cliente entidad)
         {
             try
             {
-                //Cliente entidad = new Cliente();
-                //entidad.Codigo = entidadDTO.Codigo;
-                //entidad.Nombre = entidadDTO.Nombre;
-                //entidad.Apellido = entidadDTO.Apellido;
-                //entidad.Direccion = entidadDTO.Direccion;
-                //entidad.Localidad = entidadDTO.Localidad;
-                //entidad.Telefono = entidadDTO.Telefono;
-
-                Cliente entidad = mapper.Map <Cliente>(entidadDTO);
                 return await repositorio.Insert(entidad);
             }
             catch (Exception e)
             {
                 
-                return BadRequest(e.InnerException?.Message);
+                return BadRequest(e.Message);
             }
         }
         #endregion
 
         #region Put
         [HttpPut("{id:int}")] //api/Clientes/2
-        public async Task<ActionResult> Put(int id, Cliente entidad)
+        public async Task<ActionResult> Put(int id, [FromBody] Cliente entidad)
         {
-            if (id != entidad.Id)
-            {
-                return BadRequest("Datos Incorrectos");
-            }
-            var pepe = await repositorio.SelectById(id);
-
-            if (pepe == null)
-            {
-                return NotFound("No existe el cliente mencionado.");
-            }
-
-            pepe.Nombre = entidad.Nombre;
-            pepe.Apellido = entidad.Apellido;
-            pepe.Direccion = entidad.Direccion;
-            pepe.Localidad = entidad.Localidad;
-            pepe.Telefono = entidad.Telefono;
-            pepe.Mail = entidad.Mail;
-            pepe.Descripcion = entidad.Descripcion;
-
             try
             {
-                await repositorio.Update(id, pepe);
+                if (id != entidad.Id)
+                {
+                    return BadRequest("Datos Incorrectos");
+                }
+                var pepe = await repositorio.Update(id, entidad);
+
+                if (!pepe)
+                {
+                    return BadRequest("No se pudo actualizar el cliente.");
+                }
                 return Ok();
             }
             catch (Exception e)
             {
-
-                return BadRequest(e.InnerException?.Message);
+                return BadRequest(e.Message);
             }
         }
         #endregion

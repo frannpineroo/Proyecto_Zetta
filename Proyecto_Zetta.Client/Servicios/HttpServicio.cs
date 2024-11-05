@@ -1,4 +1,4 @@
-﻿
+﻿using Azure;
 using System.Text;
 using System.Text.Json;
 
@@ -47,7 +47,27 @@ namespace Proyecto_Zetta.Client.Servicios
             
         }
 
-        private async Task<T?> DesSerializar<T>(HttpResponseMessage response)
+		public async Task<HttpRespuesta<object>> Put<T>(string url, T entidad)
+		{
+			var enviarJson = JsonSerializer.Serialize(entidad);
+			var enviarContent = new StringContent(enviarJson,
+								Encoding.UTF8,
+								"application/json");
+
+			var response = await http.PutAsync(url, enviarContent);
+			if (response.IsSuccessStatusCode)
+			{
+				//var respuesta = await DesSerializar<object>(response);
+				return new HttpRespuesta<object>(null, false, response);
+			}
+			else
+			{
+				return new HttpRespuesta<object>(default, true, response);
+			}
+
+		}
+
+		private async Task<T?> DesSerializar<T>(HttpResponseMessage response)
         {
             var respuestaStr = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<T>(respuestaStr,

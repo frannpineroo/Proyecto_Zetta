@@ -3,7 +3,8 @@
 @inject NavigationManager navigationManager
 
 <h2>Crear Nuevo Cliente</h2>
-<EditForm Model="cliente" OnInvalidSubmit="Grabar">
+
+<EditForm Model="cliente" OnValidSubmit="Grabar">
 	<DataAnnotationsValidator />
 	<div class="form-group">
 		<label>Código</label>
