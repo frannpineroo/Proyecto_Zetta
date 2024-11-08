@@ -1,10 +1,9 @@
-﻿using Azure;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 
 namespace Proyecto_Zetta.Client.Servicios
 {
-    public class HttpServicio : IHttpServicio
+	public class HttpServicio : IHttpServicio
     {
         private readonly HttpClient http;
 

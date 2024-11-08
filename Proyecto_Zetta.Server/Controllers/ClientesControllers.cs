@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Proyecto_Zetta.DB.Data.Entity;
 using Proyecto_Zetta.Server.Repositorio;
-using Proyecto_Zetta.Shared.DTO;
 
 namespace Proyecto_Zetta.Server.Controllers
 {

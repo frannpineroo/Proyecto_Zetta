@@ -4,8 +4,6 @@
 
 <h3>Editar Cliente</h3>
 
-<h1>@pepe</h1>
-
 <EditForm Model="cliente" OnValidSubmit="Grabar">
 	<DataAnnotationsValidator />
 	<div class="form-group">
@@ -73,8 +71,6 @@
 	[Parameter] public int clienteId { get; set; }
 	private Cliente cliente = new Cliente();
 
-	string pepe = "";
-
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
@@ -98,7 +94,6 @@
 
 	private async Task Grabar()
 	{
-		pepe = clienteId.ToString();
 		var httpRespuesta = await http.Put<Cliente>($"api/Clientes/{clienteId}", cliente);
 		if (httpRespuesta.Error)
 		{
