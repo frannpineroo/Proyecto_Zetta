@@ -11,8 +11,8 @@ namespace Proyecto_Zetta.Client.Servicios
         {
             this.http = http;
         }
-
-        public async Task<HttpRespuesta<T>> Get<T>(string url)
+		#region Get
+		public async Task<HttpRespuesta<T>> Get<T>(string url)
         {
             var response = await http.GetAsync(url);
             if (response.IsSuccessStatusCode)
@@ -25,8 +25,10 @@ namespace Proyecto_Zetta.Client.Servicios
                 return new HttpRespuesta<T>(default, true, response);
             }
         }
+		#endregion
 
-        public async Task<HttpRespuesta<object>> Post<T>(string url, T entidad) 
+		#region Post
+		public async Task<HttpRespuesta<object>> Post<T>(string url, T entidad) 
         {
             var enviarJson = JsonSerializer.Serialize(entidad);
             var enviarContent = new StringContent(enviarJson,
@@ -45,7 +47,9 @@ namespace Proyecto_Zetta.Client.Servicios
 			}
             
         }
+		#endregion
 
+		#region Put
 		public async Task<HttpRespuesta<object>> Put<T>(string url, T entidad)
 		{
 			var enviarJson = JsonSerializer.Serialize(entidad);
@@ -65,12 +69,23 @@ namespace Proyecto_Zetta.Client.Servicios
 			}
 
 		}
+		#endregion
 
+		#region Delete
+		public async Task<HttpRespuesta<object>> Delete(string url)
+		{
+			var respuesta = await http.DeleteAsync(url);
+			return new HttpRespuesta<object>(null, !respuesta.IsSuccessStatusCode, respuesta);
+		}
+		#endregion
+
+		#region Deserializar
 		private async Task<T?> DesSerializar<T>(HttpResponseMessage response)
         {
             var respuestaStr = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<T>(respuestaStr,
                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
-    }
+		#endregion
+	}
 }
